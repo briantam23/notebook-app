@@ -8,11 +8,17 @@ const Auth = () => {
     const [password, setPassword] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isDarkMode, setIsDarkMode] = useState(false);
 
     useEffect(() => {
-        if (typeof window === 'object' && !!sessionStorage.getItem('isAuthenticated')) {
-            setUsername(JSON.parse(sessionStorage.getItem('isAuthenticated'))?.username);
-            setIsLoggedIn(true);
+        if (typeof window === 'object') {
+            if (sessionStorage.getItem('isAuthenticated')) {
+                setUsername(JSON.parse(sessionStorage.getItem('isAuthenticated'))?.username);
+                setIsLoggedIn(true);
+            }
+            if (sessionStorage.getItem('isDarkMode')) {
+                setIsDarkMode(true);
+            }
         }
     }, [])
   
@@ -44,43 +50,54 @@ const Auth = () => {
     };
 
     return (
-        <div className='px-12 pt-16 pb-12 sm:px-12 lg:pt-24 dark:bg-gray-900 dark:text-white bg-white text-black'>
-            <h1 className='text-4xl pb-12 font-extrabold'>Login</h1>
-            {
-                isLoggedIn ? (
-                    <>
-                        <p className='text-2xl mb-8'>Hello, {username}!</p>
-                        <button className='p-2 border bg-red-500 text-white mt-4 mb-4' onClick={handleLogout}>Logout</button>
-                    </>
-                ) : (
-                    <form onSubmit={handleLogin}>
-                        <div className='mb-4'>
-                            <label htmlFor='username'>Username:</label>
-                            <input
-                                className='border ml-2 p-1'
-                                type='text'
-                                value={username}
-                                onChange={(e) => handleChange(e, 'username')}
-                            />
-                        </div>
-                        <div className='mb-4'>
-                            <label htmlFor='password'>Password:</label>
-                            <input
-                                className='border ml-3 p-1'
-                                type='password'
-                                value={password}
-                                onChange={(e) => handleChange(e, 'password')}
-                            />
-                        </div>
-                        { errorMsg && <p style={{ color: 'red' }}>{errorMsg}</p> }
-                        <button className='p-2 border bg-green-500 text-white mt-4 mb-4' type='submit'>Login</button>
-                    </form>
-                )
-            }
-            <div className='mt-8'>
-                <Link className='p-2 border bg-blue-500 text-white mb-4' href='/'>Return to homepage</Link>
+        <>
+            <div className={isDarkMode ? 'dark' : ''}>
+                <div className='px-8 md:px-12 pt-6 sm:pt-10 md:pt-12 dark:bg-gray-900 dark:text-white bg-white text-black'>
+                    <h1 className='text-4xl pb-4 md:pb-6 font-extrabold'>Login</h1>
+                    <hr className='pb-4 md:pb-6'/>
+                    {
+                        isLoggedIn ? (
+                            <>
+                                <p className='text-2xl mb-4'>Hello, {username}!</p>
+                                <button className='p-2 border bg-red-500 text-white mt-4 mb-4' onClick={handleLogout}>Logout</button>
+                            </>
+                        ) : (
+                            <form onSubmit={handleLogin}>
+                                <div className='mb-4'>
+                                    <label htmlFor='username'>Username:</label>
+                                    <input
+                                        className='border ml-2 p-1 dark:text-black'
+                                        type='text'
+                                        value={username}
+                                        onChange={(e) => handleChange(e, 'username')}
+                                    />
+                                </div>
+                                <div className='mb-4'>
+                                    <label htmlFor='password'>Password:</label>
+                                    <input
+                                        className='border ml-3 p-1 dark:text-black'
+                                        type='password'
+                                        value={password}
+                                        onChange={(e) => handleChange(e, 'password')}
+                                    />
+                                </div>
+                                { errorMsg && <p className='text-red-500 max-md:mb-2'>{errorMsg}</p> }
+                                <button className='p-2 border dark:border-black bg-green-500 text-white mt:2 md:mt-4 mb-4' type='submit'>Login</button>
+                            </form>
+                        )
+                    }
+                    <div className='mt-4 md:mt-8'>
+                        <Link className='p-2 border dark:border-black bg-blue-500 text-white mb-4' href='/'>Return to homepage</Link>
+                    </div>
+                </div>
             </div>
-        </div>
+            <style jsx global>{`
+                html {
+                    background-color: ${isDarkMode ? 'rgb(17 24 39 / var(--tw-bg-opacity, 1))' : 'white'};
+                }   
+            `}
+            </style>
+        </>
     );
 }
 

@@ -85,14 +85,29 @@ const Canvas = () => {
         return (
             <div>
                 <div className='flex space-x-2 mb-6'>
-                    <button className={`p-2 border-2 ${selectedTool === 'line' ? 'border-black' : ''}`} onClick={() => setSelectedTool('line')}>Line</button>
-                    <button className={`p-2 border-2 ${selectedTool === 'rectangle' ? 'border-black' : ''}`} onClick={() => setSelectedTool('rectangle')}>Rectangle</button>
-                    <button className={`p-2 border-2 ${selectedTool === 'freehand' ? 'border-black' : ''}`} onClick={() => setSelectedTool('freehand')}>Freehand</button>
-                    <button onClick={clearCanvas}>Clear Canvas</button>
+                    <button 
+                        className={`p-2 border-2 ${selectedTool === 'line' ? 'border-black dark:border-white' : 'dark:border-black'}`}
+                        onClick={() => setSelectedTool('line')}
+                    >
+                        Line
+                    </button>
+                    <button
+                        className={`p-2 border-2 ${selectedTool === 'rectangle' ? 'border-black dark:border-white' : 'dark:border-black'}`}
+                        onClick={() => setSelectedTool('rectangle')}
+                    >
+                        Rectangle
+                    </button>
+                    <button
+                        className={`p-2 border-2 ${selectedTool === 'freehand' ? 'border-black dark:border-white' : 'dark:border-black'}`}
+                        onClick={() => setSelectedTool('freehand')}
+                    >
+                        Freehand
+                    </button>
+                    <button className='p-2' onClick={clearCanvas}>Clear</button>
                 </div>
                 <canvas
                     ref={canvasRef}
-                    className='border border-black'
+                    className='border border-black dark:bg-white'
                     height={500}
                     width={750}
                     onMouseUp={handleMouseUp}

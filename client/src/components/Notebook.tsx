@@ -15,6 +15,7 @@ const Notebook = () => {
                 { name: newNotebookName, sketches: [], notes: [] }
             ]
         );
+        setNewNotebookName('');
     };
     const selectNotebook = (notebook, idx) => {
         setSelectedNotebook(notebook);
@@ -24,23 +25,37 @@ const Notebook = () => {
     return (
         <div className='pr-8'>
             <h2 className='text-2xl pb-4' style={{ minWidth: '190px' }}>My Notebooks</h2>
-            <ul className='list-disc list-inside pb-8'>
-                {notebooks.map((notebook, idx) => (
-                    <li 
-                        key={idx}
-                        onClick={() => selectNotebook(notebook, idx)}
-                        className={`cursor-pointer ${selectedIdx === idx ? 'text-black' : 'text-gray-600'}`}
-                    >
-                        {notebook.name}
-                    </li>
-                ))}
+            <ul className='list-disc list-inside pb-6'>
+                { 
+                    notebooks.length > 0 ? (
+                        notebooks.map((notebook, idx) => (
+                            <li 
+                                key={idx}
+                                onClick={() => selectNotebook(notebook, idx)}
+                                className={`cursor-pointer ${selectedIdx === idx ? 'text-black dark:text-white' : 'text-gray-600 dark:text-gray-400'}`}
+                            >
+                                {notebook.name}
+                            </li>
+                        ))
+                    ) : (
+                        '(Empty)'
+                    )}
             </ul>
-            <textarea
-                onChange={(e) => setNewNotebookName(e.target.value)}
-                value={newNotebookName}
-                className="border-2 w-full p-2"
-            />
-            <button onClick={addNotebook} className='p-2 border bg-blue-500 text-white mb-4' disabled={!newNotebookName}>Add Notebook</button>
+            <div className='flex flex-col'>
+                <textarea
+                    onChange={(e) => setNewNotebookName(e.target.value)}
+                    value={newNotebookName}
+                    className="border-2 dark:text-black w-full p-2 mb-2"
+                    style={{ maxWidth: '175px' }}
+                />
+                <button 
+                    onClick={addNotebook}
+                    className='p-2 border dark:border-black bg-blue-500 text-white mb-12 md:mb-4' disabled={!newNotebookName}
+                    style={{ maxWidth: '175px', maxHeight: '45px' }}
+                >
+                    Add Notebook
+                </button>
+            </div>
             {selectedNotebook && (
                 <>
                     <hr className='pb-8' />
