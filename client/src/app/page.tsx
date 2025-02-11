@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Canvas from '@/components/Canvas';
 import NoteBook from '@/components/Notebook';
@@ -8,9 +8,21 @@ import ExportButton from '@/components/ExportButton';
 
 const App = () => {
     const [isDarkMode, setIsDarkMode] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const toggleTheme = () => {
         setIsDarkMode(!isDarkMode);
+    };
+
+    useEffect(() => {
+        if (typeof window === 'object' && !!sessionStorage.getItem('isAuthenticated')) {
+            setIsLoggedIn(true);
+        }
+    }, [])
+
+    const handleLogout = () => {
+        sessionStorage.removeItem('isAuthenticated');
+        setIsLoggedIn(false);
     };
 
     return (
@@ -21,7 +33,11 @@ const App = () => {
                     <div>
                         <button className='p-4' onClick={toggleTheme}>Toggle Theme</button>
                         <ExportButton />
-                        <Link className='p-4' href="/auth">Account</Link>
+                        {
+                            isLoggedIn
+                                ? <Link className='p-4' href="#" onClick={handleLogout}>Logout</Link>
+                                : <Link className='p-4' href="/auth">Login</Link>
+                        }
                     </div>
                 </div>
                 <div className='flex' style={{ justifyContent: 'space-between' }}>

@@ -1,13 +1,20 @@
 import "@/app/globals.css";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link'
 
 
 const Auth = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        if (typeof window === 'object' && !!sessionStorage.getItem('isAuthenticated')) {
+            setUsername(JSON.parse(sessionStorage.getItem('isAuthenticated'))?.username);
+            setIsLoggedIn(true);
+        }
+    }, [])
   
     const handleChange = (event, type) => {
         if (type === 'username') {
@@ -21,20 +28,21 @@ const Auth = () => {
         event.preventDefault();
   
         if (username === 'foo' && password === 'bar') {
+            sessionStorage.setItem('isAuthenticated', JSON.stringify({ username }));
             setIsLoggedIn(true);
             setErrorMsg('');
         } else {
-            setIsLoggedIn(false);
             setErrorMsg('Invalid username and/or password.');
         }
     };
-  
+
     const handleLogout = () => {
+        sessionStorage.removeItem('isAuthenticated');
         setIsLoggedIn(false);
         setUsername('');
         setPassword('');
     };
-  
+
     return (
         <div className='px-12 pt-16 pb-12 sm:px-12 lg:pt-24 dark:bg-gray-900 dark:text-white bg-white text-black'>
             <h1 className='text-4xl pb-12 font-extrabold'>Login</h1>
