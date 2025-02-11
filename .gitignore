@@ -1,5 +1,6 @@
 # dependencies
 client/node_modules
+server/node_modules
 
 # testing
 /coverage
@@ -22,7 +23,7 @@ client/yarn-error.log*
 client/.pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env*
+server/.env*
 
 # vercel
 client/.vercel

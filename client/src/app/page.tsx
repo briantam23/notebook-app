@@ -40,10 +40,10 @@ const App = () => {
         <>
             <div className={isDarkMode ? 'dark' : ''}>
                 <div className='pb-12 px-8 md:px-12 pt-8 sm:pt-10 md:pt-12 dark:bg-gray-900 dark:text-white bg-white text-black'>
-                    <div className='md:flex sm:pb-3' style={{ justifyContent: 'space-between' }}>
-                        <h1 className='text-3xl md:text-4xl font-extrabold' style={{ alignContent: 'center' }}>Notebook App</h1>
+                    <div className='md:flex sm:pb-3 navbar-container'>
+                        <h1 className='text-3xl md:text-4xl font-extrabold title'>Notebook App</h1>
                         <div>
-                            <button className='p-4' style={{ marginLeft: '-14px' }} onClick={toggleTheme}>Toggle Theme</button>
+                            <button className='p-4 toggle-theme-button'onClick={toggleTheme}>Toggle Theme</button>
                             <ExportButton />
                             {
                                 isLoggedIn
@@ -62,7 +62,16 @@ const App = () => {
             <style jsx global>{`
                 html {
                     background-color: ${isDarkMode ? 'rgb(17 24 39 / var(--tw-bg-opacity, 1))' : 'white'};
-                }   
+                }
+                .navbar-container {
+                    justify-content: space-between;
+                }
+                .title {
+                    align-content: center;
+                }
+                .toggle-theme-button {
+                    margin-left: -14px;
+                }
             `}
             </style>
         </>
