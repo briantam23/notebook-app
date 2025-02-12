@@ -1,6 +1,7 @@
 {
-  "name": "ink-ai-coding-challenge",
+  "name": "notebook-app",
   "version": "0.1.0",
+  "homepage": "https://notebook-app-opal.vercel.app/",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -13,7 +14,8 @@
     "jspdf": "^2.5.2",
     "next": "15.1.6",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
