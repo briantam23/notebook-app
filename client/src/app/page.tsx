@@ -1,14 +1,17 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import io from 'socket.io-client';
+import axios from 'axios';
 import Canvas from '@/components/Canvas';
 import NoteBook from '@/components/Notebook';
 import ExportButton from '@/components/ExportButton';
 
 
-const App = () => {
+const App = ({ data }) => {
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [notebooks, setNotebooks] = useState(data.notebooks)
 
     const toggleTheme = () => {
         if (isDarkMode) {
@@ -20,6 +23,28 @@ const App = () => {
         }
     };
 
+
+    const socket = io('http://localhost:5000');
+
+    useEffect(() => {
+
+        socket.on('notebookCreated', (notebook) => {
+            setNotebooks([...notebooks, notebook]);
+        });
+
+        socket.on('notebookUpdated', (notebook) => {
+            const _notebooks = notebooks.map((_notebook) => (
+                _notebook.id === notebook.id ? notebook : _notebook
+            ))
+            setNotebooks(_notebooks);
+        });
+
+        return () => {
+            socket.off('notebookCreated');
+            socket.off('notebookUpdated');
+        };
+    }, []);
+
     useEffect(() => {
         if (typeof window === 'object') {
             if (sessionStorage.getItem('isAuthenticated')) {
@@ -30,6 +55,22 @@ const App = () => {
             }
         }
     }, [])
+
+    const createNotebook = async (title: string) => {
+        const response = await axios.post(
+            'http://localhost:5000/notebooks',
+            { title }
+        );
+        socket.emit('createNotebook', response.data);
+    };
+
+    const updateNotebook = async (notebook) => {
+        const response = await axios.put(
+            `http://localhost:5000/notebooks/${notebook.id}`,
+            { title: notebook.title }
+        );
+        socket.emit('updateNotebook', response.data);
+    };
 
     const handleLogout = () => {
         sessionStorage.removeItem('isAuthenticated');
@@ -54,7 +95,11 @@ const App = () => {
                     </div>
                     <hr className='pb-7 sm:pb-10' />
                     <div className='md:flex justify-normal'>
-                        <NoteBook />
+                        <NoteBook
+                            notebooks={notebooks}
+                            createNotebook={createNotebook}
+                            updateNotebook={updateNotebook}
+                        />
                         <Canvas />
                     </div>
                 </div>
@@ -77,5 +122,18 @@ const App = () => {
         </>
     )
 };
+
+
+export async function getServerSideProps() {
+    const res = await fetch('/notebooks');
+    const data = await res.json();
+
+    return {
+        props: {
+            data
+        }
+    }
+}
+
 
 export default App;

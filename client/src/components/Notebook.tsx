@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import Note from './Note';
 
 
-const Notebook = () => {
-    const [notebooks, setNotebooks] = useState([]);
+const Notebook = (props) => {
+    const [notebooks, setNotebooks] = useState(props.notebooks);
     const [newNotebookName, setNewNotebookName] = useState('');
     const [selectedNotebook, setSelectedNotebook] = useState(null);
     const [selectedIdx, setSelectedIdx] = useState(null);
 
     const addNotebook = () => {
+        props.createNotebook(
+            { title: newNotebookName }
+        );
         setNotebooks(
             [
                 ...notebooks,
