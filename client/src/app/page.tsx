@@ -11,7 +11,7 @@ import ExportButton from '@/components/ExportButton';
 const App = ({ data }) => {
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [notebooks, setNotebooks] = useState(data.notebooks)
+    const [notebooks, setNotebooks] = useState(data?.notebooks || [])
 
     const toggleTheme = () => {
         if (isDarkMode) {
